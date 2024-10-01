@@ -1,0 +1,56 @@
+<center>
+# Fall 2024
+## MATH 261: Intro to Data Science
+### Assignment #3 | Total points: 10
+
+### <span style="color:limegreen">**Thinh Nguyen **</span>
+<span style="color:red">**Date:** Wednesday, 9/11/2024</span>
+</center>
+
+\
+
+<h3><span style="color:red">**Important Instructions:**</span></h3>
+- **It is mandatory to consistently uphold the DePauw integrity policy,** <span style="text-decoration:underline"> 
+[DePauw's Academic Integrity Policy.](https://www.depauw.edu/academics/academic-resources/academic-integrity/)</span>
+
+
+-	**Refrain from utilizing resources like ChatGPT or any other materials that may lead to plagiarism concerns.**
+-	**Carry out your tasks autonomously and avoid sharing any documents via email or other communication platforms.**
+-	**Please be aware that appropriate actions will be implemented in case any violation is identified.**
+
+- **Show both your R codes and results in the HTML file.**\
+- **Save your .RMD file/.HTML file as your Last Name_A3.RMD/Last Name_A3.HTML**\
+- **Submit your Assignment #3 (both .RMD and .HTML files) on Moodle through the appropriatel link.** \
+
+___
+
+\
+\
+
+
+<span style="color:blue"><h3>**Question:**</h2></span>
+\
+<div style="float: right">[4 pts.]</div>
+
+
+```{r}
+calculate_total_price <- function(grocery_rate, amount_spent) {
+  total_price <- amount_spent + (amount_spent * grocery_rate / 100)
+  return(total_price)
+}
+
+states <- c("Alabama", "Arkansas", "Hawaii", "Idaho", "Illinois", "Kansas", "Mississippi", 
+            "Missouri", "Oklahoma", "South Dakota", "Tennessee", "Utah", "Virginia")
+
+grocery_rates <- c(4, 0.125, 4, 6, 1, 6.5, 7, 1.225, 4.5, 4.5, 4, 1.75, 2.5)
+
+amount_spent <- 455
+
+for (i in 1:length(states)) {
+  state <- states[i]
+  grocery_rate <- grocery_rates[i]
+  total_price <- calculate_total_price(grocery_rate, amount_spent)
+  print(paste("Total price in", state, "is:", round(total_price, 2)))
+}
+```
+\
