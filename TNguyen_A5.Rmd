@@ -1,0 +1,69 @@
+<center>
+# Fall 2024
+## MATH 261: Intro to Data Science
+### Assignment #5 | Total points: 10
+
+### <span style="color:limegreen">**Thinh Nguyen **</span>
+<span style="color:red">**Date:** Wednesday, 9/24/2024</span>
+</center>
+
+\
+
+<h3><span style="color:red">**Important Instructions:**</span></h3>
+- **It is mandatory to consistently uphold the DePauw integrity policy,** <span style="text-decoration:underline"> 
+[DePauw's Academic Integrity Policy.](https://www.depauw.edu/academics/academic-resources/academic-integrity/)</span>
+
+
+-	**Refrain from utilizing resources like ChatGPT or any other materials that may lead to plagiarism concerns.**
+-	**Carry out your tasks autonomously and avoid sharing any documents via email or other communication platforms.**
+-	**Please be aware that appropriate actions will be implemented in case any violation is identified.**
+
+- **Show both your R codes and results in the HTML file.**\
+- **Save your .RMD file/.HTML file as your Last Name_A5.RMD/Last Name_A5.HTML**\
+- **Submit your Assignment #5 (both .RMD and .HTML files) on Moodle through the appropriatel link.** \
+
+___
+
+\
+\
+
+
+<span style="color:blue"><h3>**Question:**</h2></span>
+Use the `continent.csv` dataset to produce the following graph. Write a few sentences to describe the main features of your graph.
+<div style="float: right">[9+1=10 pts.]</div>
+
+\
+
+```{r}
+library(ggplot2)
+continent_data <- data.frame(
+  Continent = c("Africa", "Asia", "Europe", "North America", "Oceania", "South America"),
+  Number_of_People = c(55, 48.5, 48, 26, 16, 13),  # Use number of people
+  Percentage = c(26.6, 23.7, 23.2, 12.6, 7.7, 6.3)  # Retain percentages for labels
+)
+
+# Plot the bar chart
+ggplot(continent_data, aes(x = reorder(Continent, Number_of_People), y = Number_of_People, fill = Continent)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = paste0(Percentage, "%")),  hjust = 1.2) +  # Show percentage on the bars
+  labs(x = "Continent", y = "Number of People",
+  caption = expression(bold("Figure 1:")~"Graphs showing continent of origin of all applicants for immigrant visas in 2020")) +  # Bold "Figure 1" in caption
+  scale_y_continuous(limits = c(0, 55), breaks = seq(0, 55, by = 5)) +  # Custom Y-axis with intervals of 5
+  theme_minimal() +
+  scale_fill_manual(values = c("Africa" = "orange", "Asia" = "yellow", "Europe" = "blue", 
+                               "North America" = "green", "Oceania" = "red", "South America" = "purple")) +
+  coord_flip() +
+  theme(panel.background = element_rect(fill = "grey90"),
+        panel.border = element_blank(),
+        panel.grid.major = element_line(color = "white"),  
+        panel.grid.minor = element_line(color = "white"),
+        axis.line = element_line(color = "black"),  # Add black axis lines
+        axis.ticks = element_line(color = "black"),  # Add black ticks on both axes
+        axis.title.y = element_text(angle = 0),
+        plot.caption = element_text(face = "italic", size = 12),
+        legend.position = "none")# Rotate X-axis title
+```
+\
+\
+
+This graph displays the number of people from each continent who applied for immigrant visas in 2020. Africa has the highest number of applicants with 55 people, representing 26.6% of the total, followed by Asia (23.7%) and Europe (23.2%). North America, Oceania, and South America have significantly fewer applicants, with North America contributing 12.6%, Oceania 7.7%, and South America 6.3%. The percentages are displayed inside the bars, while the X-axis represents the number of people. The graph is clear, with colored bars representing each continent and no legend, as the colors are self-explanatory.
