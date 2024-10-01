@@ -1,0 +1,121 @@
+<center>
+# Fall 2024
+## MATH 261: Intro to Data Science
+### Assignment #1 | Total points: 10
+
+### <span style="color:limegreen">**Thinh Nguyen **</span>
+<span style="color:red">**Date:** Wednesday, 8/29/2024</span>
+</center>
+
+\
+
+<h3><span style="color:red">**Important Instructions:**</span></h3>
+- **It is mandatory to consistently uphold the DePauw integrity policy,** <span style="text-decoration:underline"> 
+[DePauw's Academic Integrity Policy.](https://www.depauw.edu/academics/academic-resources/academic-integrity/)</span>
+
+
+-	**Refrain from utilizing resources like ChatGPT or any other materials that may lead to plagiarism concerns.**
+-	**Carry out your tasks autonomously and avoid sharing any documents via email or other communication platforms.**
+-	**Please be aware that appropriate actions will be implemented in case any violation is identified.**
+
+- **Show both your R codes and results in the HTML file.**\
+- **Save your .RMD file/.HTML file as your Last Name_A1.RMD/Last Name_A1.HTML**\
+- **Submit your Assignment #1 (both .RMD and .HTML files) on Moodle through the appropriatel link.** \
+
+___
+
+\
+\
+
+<span style="color:blue">**Question #1:**</span>
+Write a paragraph not exceeding five sentences to explain what data science is.
+<div style="float: right">[2 pts.]</div>
+\
+\
+
+Data science is a discipline that provides principles, methodology, and guidelines for the analysis of data for tools, values, or insights. Driven by a huge workforce demand, many academic institutions have started to offer degrees in data science, with many at the graduate, and a few at the undergraduate level. Curricula may differ at different institutions, because of varying levels of faculty expertise, and different disciplines (such as mathematics, computer science, and business) in developing the curriculum. The University of Massachusetts Dartmouth started offering degree programs in data science from Fall 2015, at both the undergraduate and the graduate level. Quite a few articles have been published that deal with graduate data science courses, much less so dealing with undergraduate ones.
+\
+\
+
+<span style="color:blue">**Question #2:**</span>
+Suppose you work at a bank as a Data Scientist and your task is to automate the loan approval process based on applicant credit scores. The credit scores for 100 applicants are given below:
+
+703, 673, 587, 728, 759, 650, 835, 740, 501, 689, 714,
+573, 709, 651, 570, 810, 587, 575, 810, 714, 438, 705,
+760, 650, 725, 564, 808, 615, 628, 551, 769, 594, 590,
+596, 684, 801, 693, 598, 777, 757, 767, 601, 699, 640,
+808, 777, 725, 691, 562, 598, 756, 816, 802, 704, 725, 
+807, 567, 775, 603, 560, 558, 754, 560, 648, 584, 738, 
+816, 621, 665, 780, 569, 734, 662, 629, 559, 563, 562, 
+575, 555, 673, 742, 784, 587, 682, 626, 765, 721, 593, 
+730, 811, 632, 622, 778, 665, 597, 615, 742, 729, 609,
+782
+
+The bank's policy is to approve loans for applicants with credit scores above 650. 
+```{r}
+credit_scores <- c(703, 673, 587, 728, 759, 650, 835, 740, 501, 689, 714,
+573, 709, 651, 570, 810, 587, 575, 810, 714, 438, 705,
+760, 650, 725, 564, 808, 615, 628, 551, 769, 594, 590,
+596, 684, 801, 693, 598, 777, 757, 767, 601, 699, 640,
+808, 777, 725, 691, 562, 598, 756, 816, 802, 704, 725, 
+807, 567, 775, 603, 560, 558, 754, 560, 648, 584, 738, 
+816, 621, 665, 780, 569, 734, 662, 629, 559, 563, 562, 
+575, 555, 673, 742, 784, 587, 682, 626, 765, 721, 593, 
+730, 811, 632, 622, 778, 665, 597, 615, 742, 729, 609,
+782)
+```
+
+\
+
+a) The number of applicants with credit scores at or above 650.
+<div style="float: right">[2 pts.]</div>
+\
+
+```{r}
+num_above_650 <- sum(credit_scores >= 650)
+num_above_650
+```
+\
+
+b) The number of applicants with credit scores below 650.
+<div style="float: right">[2 pts.]</div>
+\
+
+```{r}
+num_below_650 <- sum(credit_scores < 650)
+num_below_650
+```
+\
+c) The percentage of applicants who qualify for a loan.
+<div style="float: right">[2 pts.]</div>
+
+\
+
+```{r}
+num_above_650_only <- sum(credit_scores > 650)
+percentage_qualified <- (num_above_650_only / length(credit_scores)) * 100
+percentage_qualified
+```
+\
+\
+
+<span style="color:blue">**Question #3:**</span>
+Type the following:
+<div style="float: right">[2 pts.]</div>
+For a sample of n observation $x_1, x_2, ..., x_n,$ the sample mean $(\overline{x})$ and the sample variance $(s^2)$ are defined as follows:
+\
+<center>
+$\overline{x} = \sum_{i = 1}^{n} x_i$
+
+</center>
+\
+
+and
+\
+
+<center>
+$s^{2}$ = $\frac{\sum_{i=1}^{n} (x_{i} - \overline{x})^2}{n-1}$
+</center>
+\
+\
+
