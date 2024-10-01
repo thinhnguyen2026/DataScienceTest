@@ -1,0 +1,124 @@
+<center>
+# Fall 2024
+## MATH 261: Intro to Data Science
+### Assignment #2 | Total points: 10
+
+### <span style="color:limegreen">**Type your name here **</span>
+<span style="color:red">**Date:** Wednesday, 9/4/2024</span>
+</center>
+
+\
+
+<h3><span style="color:red">**Important Instructions:**</span></h3>
+- **It is mandatory to consistently uphold the DePauw integrity policy,** <span style="text-decoration:underline"> 
+[DePauw's Academic Integrity Policy.](https://www.depauw.edu/academics/academic-resources/academic-integrity/)</span>
+
+
+-	**Refrain from utilizing resources like ChatGPT or any other materials that may lead to plagiarism concerns.**
+-	**Carry out your tasks autonomously and avoid sharing any documents via email or other communication platforms.**
+-	**Please be aware that appropriate actions will be implemented in case any violation is identified.**
+
+- **Show both your R codes and results in the HTML file.**\
+- **Save your .RMD file/.HTML file as your Last Name_A2.RMD/Last Name_A1.HTML**\
+- **Submit your Assignment #2 (both .RMD and .HTML files) on Moodle through the appropriatel link.** \
+
+___
+
+\
+\
+
+
+<span style="color:blue">**Question #1:**</span>
+\
+Type the following:
+<div style="float: right">[4 pts.]</div>
+\
+\
+<h4>**Standard Score (Z-Score):**</h4>
+
+A **Z-score** (also known as a standard score) is a statistical measurement that describes a value’s relationship to the mean of a group of values. It represents the number of standard deviations a data point is from the mean.
+
+The formula to calculate the Z-score of a value \( x \) is:
+
+\[
+Z = \frac{x - \mu}{\sigma}
+\]
+
+Where:
+
+- \( x \) is the data point.
+\
+- \( \mu \) is the mean of the data set.
+\
+- \( \sigma \) is the standard deviation of the data set.
+\
+
+A Z-score can be positive or negative:
+
+- A **positive Z-score** indicates that the data point is above the mean.
+\
+- A **negative Z-score** indicates that the data point is below the mean.
+\
+- A **Z-score of 0** indicates that the data point is exactly at the mean.
+
+\
+Z-scores are commonly used in statistics to understand how far away a specific value is from the mean, and they are also useful for comparing data points from different distributions.
+
+
+\
+
+<span style="color:blue">**Question #2:**</span>
+\
+Suppose you work at a bank as a Data Scientist and your task is to automate the loan approval process based on applicant credit scores. The credit scores for 100 applicants are given below:
+
+703, 673, 587, 728, 759, 650, 835, 740, 501, 689, 714,
+573, 709, 651, 570, 810, 587, 575, 810, 714, 438, 705,
+760, 650, 725, 564, 808, 615, 628, 551, 769, 594, 590,
+596, 684, 801, 693, 598, 777, 757, 767, 601, 699, 640,
+808, 777, 725, 691, 562, 598, 756, 816, 802, 704, 725, 
+807, 567, 775, 603, 560, 558, 754, 560, 648, 584, 738, 
+816, 621, 665, 780, 569, 734, 662, 629, 559, 563, 562, 
+575, 555, 673, 742, 784, 587, 682, 626, 765, 721, 593, 
+730, 811, 632, 622, 778, 665, 597, 615, 742, 729, 609,
+782
+
+\
+
+Categorize the credit scores as follows using `if` statements and finally count the credit scores within each category.
+<div style="float: right">[6 pts.]</div>
+
+\
+
+`Very poor` if the score between 300 and 600\
+`Poor` if the score between 601 and 630\
+`Fair` if the score between 661 and 720\
+`Good` if the score between 721 and 780\
+`Excellent` if the score between 781 and 850
+
+\
+\
+
+```{r}
+credit_scores <- c(703, 673, 587, 728, 759, 650, 835, 740, 501, 689, 714, 573, 709, 
+                   651, 570, 810, 587, 575, 810, 714, 438, 705, 760, 650, 725, 564, 
+                   808, 615, 628, 551, 769, 594, 590, 596, 684, 801, 693, 598, 777, 
+                   757, 767, 601, 699, 640, 808, 777, 725, 691, 562, 598, 756, 816, 
+                   802, 704, 725, 807, 567, 775, 603, 560, 558, 754, 560, 648, 584, 
+                   738, 816, 621, 665, 780, 569, 734, 662, 629, 559, 563, 562, 575, 
+                   555, 673, 742, 784, 587, 682, 626, 765, 721, 593, 730, 811, 632, 
+                   622, 778, 665, 597, 615, 742, 729, 609, 782)
+```
+```{r}
+credit_categories <- ifelse(credit_scores >= 300 & credit_scores <= 600, "Very Poor",
+                     ifelse(credit_scores >= 601 & credit_scores <= 660, "Poor",
+                     ifelse(credit_scores >= 661 & credit_scores <= 720, "Fair",
+                     ifelse(credit_scores >= 721 & credit_scores <= 780, "Good",
+                     ifelse(credit_scores >= 781 & credit_scores <= 850, "Excellent", NA)))))
+```
+
+\
+```{r}
+category_counts <- table(credit_categories)
+
+category_counts
+```
