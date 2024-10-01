@@ -1,0 +1,86 @@
+<center>
+# Fall 2024
+## MATH 261: Intro to Data Science
+### Assignment #4 | Total points: 10
+
+### <span style="color:limegreen">**Thinh Nguyen**</span>
+<span style="color:red">**Date:** Wednesday, 9/18/2024</span>
+</center>
+
+\
+
+<h3><span style="color:red">**Important Instructions:**</span></h3>
+- **It is mandatory to consistently uphold the DePauw integrity policy,** <span style="text-decoration:underline"> 
+[DePauw's Academic Integrity Policy.](https://www.depauw.edu/academics/academic-resources/academic-integrity/)</span>
+
+
+-	**Refrain from utilizing resources like ChatGPT or any other materials that may lead to plagiarism concerns.**
+-	**Carry out your tasks autonomously and avoid sharing any documents via email or other communication platforms.**
+-	**Please be aware that appropriate actions will be implemented in case any violation is identified.**
+
+- **Show both your R codes and results in the HTML file.**\
+- **Save your .RMD file/.HTML file as your Last Name_A4.RMD/Last Name_A4.HTML**\
+- **Submit your Assignment #4 (both .RMD and .HTML files) on Moodle through the appropriatel link.** \
+
+___
+
+\
+\
+
+
+<span style="color:blue"><h3>**Question #1:**</h2></span>
+Download the dataset `data.csv` from the course Moodle site under Assignment 4 and save it on your computer. Now, answer the following questions:
+<div style="float: right">[2+3+4=9 pts.]</div>
+
+\
+
+a) Read the file from your computer and print the first ten rows of the data.
+\
+```{r}
+# Load necessary library
+library(readr)
+
+# Read the CSV file into the data.csv object
+data.csv <- read_csv("data.csv") 
+
+# Print the first 10 rows
+head(data.csv, 10)
+```
+\
+\
+
+b) Suppose John's weight was incorrectly entered as 220 lbs in row number 3. You want to correct it by updating the value to 200 lbs in the DataFrame. Write a code to replace 220 with 200 and print the first six records.
+\
+```{r}
+# Correct John's weight in row 3
+data.csv$Weight[3] <- 200
+
+# Print the first 6 rows to confirm the change
+head(data.csv, 6)
+
+```
+\
+
+c) You may know that Body Mass Index (BMI) is a measurement that estimates body fat based on a person's height and weight. Here is the formula to calculate BMI: Divide weight in pounds (lb) by height in inches (in) squared and then multiply by a conversion factor of 703. Write a code to add a new column to the DataFrame called 'BMI', and print the first six rows of the selected variables: Name, Height, Weight, and BMI.
+\
+\
+```{r}
+# Calculate BMI using the formula: BMI = (Weight in lbs / (Height in inches)^2) * 703
+data.csv$BMI <- (data.csv$Weight / (data.csv$Height^2)) * 703
+
+# Select the required columns: Name, Height, Weight, BMI
+selected_columns <- data.csv[, c("Name", "Height", "Weight", "BMI")]
+
+# Print the first 6 rows of selected columns
+head(selected_columns, 6)
+```
+\
+
+<span style="color:blue"><h3>**Question #2:**</h2></span>
+How is the course going for you so far? Is there anything you could do to help yourself learn better? How can the instructor support you in reaching your goals? Feel free to share any thoughts you have about the course!
+<div style="float: right">[1 pt.]</div>
+
+\
+\
+
+From my perspective, this course is going well. I can be understand the lecture by your examples, so I want you to keep ypu flow that you are doing right now. Thank you
