@@ -1,0 +1,217 @@
+<center>
+# Fall 2024
+## MATH 261: Intro to Data Science
+### Exam #1:In-Class Part | Total points: 50
+
+### <span style="color:limegreen">**Thinh Nguyen**</span>
+<span style="color:red">**Date:** Wednesday, 10/9/2024</span>
+</center>
+
+\
+
+<h3><span style="color:red">**Important Instructions:**</span></h3>
+- **It is mandatory to consistently uphold the DePauw integrity policy,** <span style="text-decoration:underline"> 
+[DePauw's Academic Integrity Policy.](https://www.depauw.edu/academics/academic-resources/academic-integrity/)</span>
+
+
+-	**Refrain from utilizing resources like ChatGPT or any other materials that may lead to plagiarism concerns.**
+-	**Carry out your tasks autonomously and avoid sharing any documents via email or other communication platforms.**
+-	**Please be aware that appropriate actions will be implemented in case any violation is identified.**
+
+- **Show both your R code and results in the HTML file.**\
+- **Save your .RMD file/.HTML file as your Last Name_Exam1_InClass.RMD/Last Name_Exam1_InClass.HTML**\
+- **Submit your Exam #1 (both .RMD and .HTML files) on Moodle through the appropriatel link.** \
+
+___
+
+\
+\
+\
+
+**Q1.** Suppose you are given `customer.csv` dataset available on Moodle, which contains customers' ages and their corresponding purchase amounts. Your goal is to write R code to answer the following questions:"
+\
+
+(a) Classify the customers as youth (`age < 18 years`), adults (`18 years ≤ age < 60 years`), and seniors (`age ≥ 60 years`). Create a frequency table for your classification.
+
+```{r}
+customer_data <- read.csv("customer.csv")
+
+# Classify customers by age
+customer_data$age_group <- cut(customer_data$age, 
+                               breaks = c(-Inf, 17, 59, Inf), 
+                               labels = c("Youth", "Adults", "Seniors"))
+
+# Create frequency table for each group
+frequency_table <- table(customer_data$age_group)
+
+# Display the frequency table
+print(frequency_table)
+```
+
+\
+
+(b) Calculate the average purchase amount for each group. Report your results corresponding to age groups.
+<div style="float: right">[10+10=20 pts.]</div>
+\
+
+```{r}
+library(dplyr)
+# Load the data (assumes customer.csv is in your working directory)
+customer_data <- read.csv("customer.csv", sep = ",")
+
+colnames(customer_data) <- c("age", "purchase_amount")
+
+# Ensure that 'age' and 'purchase_amount' are numeric
+customer_data$age <- as.numeric(customer_data$age)
+customer_data$purchase_amount <- as.numeric(customer_data$purchase_amount)
+
+# Remove any rows with missing values in either 'age' or 'purchase_amount'
+customer_data <- customer_data %>%
+  filter(!is.na(age) & !is.na(purchase_amount))
+
+# Classify customers by age and calculate average purchase amount using dplyr
+average_purchase <- customer_data %>%
+  mutate(age_group = case_when(
+    age < 18 ~ "Youth",
+    age >= 18 & age < 60 ~ "Adults",
+    age >= 60 ~ "Seniors"
+  )) %>%
+  group_by(age_group) %>%
+  summarise(Average_Purchase_Amount = mean(purchase_amount, na.rm = TRUE))
+
+# Display the average purchase amounts for each group
+average_purchase
+
+```
+
+\
+
+\
+
+
+**Q2. ZixIt Corp. vs Visa USA Inc.—A Libel Case** (Source: McClave and Sincich Statistics book)\
+
+*The National Law Journal* (Aug. 26–Sept. 2, 2002) reported on an interesting court case involving ZixIt Corp., a start-up Internet credit card clearing center. ZixIt claimed that its new online credit card processing system would allow Internet shoppers to make purchases without revealing their credit card numbers. This claim violated the established protocols of most major credit card companies, including Visa. Without the company’s knowledge, a Visa vice president for technology research and development began writing e-mails and Web site postings on a Yahoo! message board for ZixIt investors, challenging ZixIt’s claim and urging investors to sell their ZixIt stock. The Visa executive posted over 400 e-mail and notes before he was caught. Once it was discovered that a Visa executive was responsible for the postings, ZixIt filed a lawsuit against Visa Corp., alleging that Visa—using the executive as its agent—had engaged in a “malicious two-part scheme to disparage and interfere with ZixIt” and its efforts to market the new online credit card processing system. In the libel case ZixIt asked for $699 million in damages. Dallas lawyers Jeff Tillotson and Mike Lynn, of the law firm Lynn Tillotson & Pinker, were hired to defend Visa in the lawsuit. The lawyers, in turn, hired Dr. James McClave as their expert statistician. McClave testified in court on an “event study” he did matching the Visa executive’s showing that there was an equal number of days when the stock went up as went down after a posting, helped the lawyers representing Visa to prevail in the case. *The National Law Journal* reported that, after two and a half days of deliberation, “the jurors found [the Visa executive] was not acting in the scope of his employment and that Visa had not defamed ZixIt or interfered with its business.” \
+
+The data for this study were collected daily from September 1 to December 30, 1999 (an 83-day period) and are available in the ZIXITVISA file. In addition to daily closing price (dollars) of ZixIt stock, the file contains a variable for whether the Visa executive posted an e-mail and the change in price of the stock the following business day. During the 83-day period, the executive posted e-mails on 43 days and had no postings on 40 days.
+If the daily posting by the Visa executive had a negative impact on ZixIt stock, then the average price change following no posting days should exceed the average price change following posting days. \
+
+One way to analyze the data is to conduct a comparison of two population means through a test of hypothesis. Suppose $\mu_1$ represent the mean price change of ZixIt stock following all nonposting days and $\mu_2$ represent the mean price change of ZixIt stock following posting days. If the charges made by ZixIt are true, then $\mu_1$ will exceed $\mu_2$. That is, $H_a: \mu_1 -\mu_2>0$. \
+
+Suppose you are hired by a law firm (not Dr. McClave) and are asked to write a report by analyzing the data to answer the same question posed in this problem. Conduct a hypothesis test at 5% significance level, considering the claim. Overall, your goal is to write a professional report for the law firm, including all analyses and interpretations/explanations, in a way that is clear and understandable to the lawyers. The dataset ZIXITVISA.csv is available on Moodle. Note that you are allowed to insert R code within your report to produce necessary results using the dataset.
+
+<div style="float: right">[30 pts.]</div>
+\
+\
+
+## Introduction
+
+This report analyzes the impact of the Visa executive’s postings on ZixIt Corp.'s stock price. The objective is to determine if the stock price changes on days following Visa executive posts are greater than those on non-posting days. To assess this claim, a hypothesis test is conducted at a 5% significance level using data from the period of September 1 to December 30, 1999. This report is intended to provide clear, data-driven insights to assist the law firm in evaluating the claim against Visa.
+
+\
+
+## Hypothesis Formulation
+
+We aim to test whether the mean price change following posting days is greater than the mean price change on non-posting days. The hypotheses are defined as follows:
+
+- **Null hypothesis (\( H_0 \))**: The mean price change following posting days (\( \mu_1 \)) is less than or equal to the mean price change following non-posting days (\( \mu_2 \)), i.e., \( \mu_1 \leq \mu_2 \).
+- **Alternative hypothesis (\( H_a \))**: The mean price change following posting days (\( \mu_1 \)) is greater than the mean price change following non-posting days (\( \mu_2 \)), i.e., \( \mu_1 > \mu_2 \).
+
+---
+
+## Data Loading and Preparation
+
+```{r}
+# Load necessary libraries
+library(dplyr)
+
+# Load the dataset (assuming it's saved as ZIXITVISA.csv)
+zixit_data <- read.csv("ZIXITVISA.csv")
+
+# Convert 'Posting' to a factor with levels 'POST' and 'NO'
+zixit_data$Posting <- factor(zixit_data$Posting, levels = c("POST", "NO"))
+
+# Remove missing data
+zixit_data <- zixit_data %>% filter(!is.na(PriceChange) & !is.na(Posting))
+
+# Preview the first few rows of the data
+head(zixit_data)
+```
+\
+
+## Descriptive Statistics
+
+The descriptive statistics for the price changes on posting and non-posting days are calculated to provide insight into the distribution of stock price changes before performing the hypothesis test.
+\
+
+```{r}
+# Descriptive statistics for posting and non-posting days
+posting_days <- zixit_data %>% filter(Posting == "POST")
+non_posting_days <- zixit_data %>% filter(Posting == "NO")
+
+# Mean and standard deviation for posting days
+posting_mean <- mean(posting_days$PriceChange, na.rm = TRUE)
+posting_sd <- sd(posting_days$PriceChange, na.rm = TRUE)
+
+# Mean and standard deviation for non-posting days
+non_posting_mean <- mean(non_posting_days$PriceChange, na.rm = TRUE)
+non_posting_sd <- sd(non_posting_days$PriceChange, na.rm = TRUE)
+
+# Display statistics
+posting_mean
+posting_sd
+non_posting_mean
+non_posting_sd
+```
+\
+
+### Analysis of Descriptive Statistics
+
+From the descriptive statistics, we observe the following:
+
+- **Posting Days**: The mean price change on days when the Visa executive posted is approximately 0.0553, with a standard deviation of 2.1969. This suggests that, on average, the stock price increased slightly on posting days, but the variability in price changes is relatively large, as indicated by the standard deviation.
+  
+- **Non-Posting Days**: On non-posting days, the mean price change is approximately -0.1328, with a standard deviation of 3.4612. This negative mean indicates that, on average, the stock price decreased on days without postings. Additionally, the standard deviation for non-posting days is even higher than for posting days, suggesting more volatility in stock prices when there were no postings.
+
+These descriptive statistics provide an initial insight into the relationship between posting and stock price changes. However, to formally test whether the difference in means is statistically significant, we will conduct a hypothesis test.
+
+
+\
+Hypothesis Testing: Two-Sample t-Test
+We conduct a two-sample t-test with unequal variances (Welch's t-test) to compare the average price changes on posting and non-posting days. The test is one-tailed, testing whether the mean price change on posting days is significantly greater than on non-posting days.
+\
+\
+```{r}
+# Conduct a two-sample t-test (Welch's t-test)
+t_test_result <- t.test(posting_days$PriceChange, 
+                        non_posting_days$PriceChange, 
+                        alternative = "greater", 
+                        var.equal = FALSE)
+
+# Display the t-test result
+t_test_result
+```
+\
+
+## Conclusion
+
+The results of the hypothesis test are as follows:
+
+- **t-statistic**: `r round(t_test_result$statistic, 2)`
+- **Degrees of freedom**: `r round(t_test_result$parameter, 2)`
+- **p-value**: `r round(t_test_result$p.value, 5)`
+
+Based on the p-value and the t-statistic:
+
+- If the p-value is less than 0.05, we reject the null hypothesis and conclude that the mean price change following posting days is greater than on non-posting days.
+- If the p-value is greater than 0.05, we fail to reject the null hypothesis, indicating insufficient evidence to support the claim.
+
+In this case, the p-value is `r round(t_test_result$p.value, 5)`, which is `r ifelse(t_test_result$p.value < 0.05, "less than", "greater than")` the significance level of 0.05. Therefore, we `r ifelse(t_test_result$p.value < 0.05, "reject", "fail to reject")` the null hypothesis.
+
+\
+
+## Final Recommendation
+
+Based on the statistical evidence, we conclude that `r ifelse(t_test_result$p.value < 0.05, "there is sufficient evidence to suggest that the mean price change following posting days is greater than on non-posting days.", "there is insufficient evidence to suggest that the mean price change following posting days is greater than on non-posting days.")` This analysis can guide the legal team in evaluating the claim regarding the impact of Visa executive postings on ZixIt's stock price.
+\
+\
