@@ -1,0 +1,195 @@
+<center>
+# Fall 2024
+## MATH 261: Intro to Data Science
+### Exam #1 | Total points: 50
+
+### <span style="color:limegreen">**Thinh Nguyen**</span>
+<span style="color:red">**Due:** Thursday, 10/10/2024 by 11:59pm</span>
+</center>
+
+\
+
+<h3><span style="color:red">**Important Instructions:**</span></h3>
+- **It is mandatory to consistently uphold the DePauw integrity policy,** <span style="text-decoration:underline"> 
+[DePauw's Academic Integrity Policy.](https://www.depauw.edu/academics/academic-resources/academic-integrity/)</span>
+
+
+-	**Refrain from utilizing resources like ChatGPT or any other materials that may lead to plagiarism concerns.**
+-	**Carry out your tasks autonomously and avoid sharing any documents via email or other communication platforms.**
+-	**Please be aware that appropriate actions will be implemented in case any violation is identified.**
+
+- **Show both your R codes and results in the HTML file.**\
+- **Save your .RMD file/.HTML file as your Last Name_Exam1_TakeHome.RMD/Last Name_Exam1_TakeHome.HTML**\
+- **Submit your Exam #1-TakeHome (both .RMD and .HTML files) on Moodle through the appropriate link.** \
+
+___
+
+\
+\
+\
+
+<span style="color:blue">  
+**Q1** A doctor’s clinic measures the fasting blood sugar level (bsl) of all patients who come in for their annual check ups. In one week, 95 bsl (mg/ml) measures were obtained. A patient who forgot to disclose that he had eaten a bowl of honey roasted cheerios an hour before the blood sample was drawn runs the risk of being falsely classified as diabetic. That’s why they say: “Do not lie to your doctor, or your pastor, or your attorney (or your statistician).” We are, of course, kidding. The correct rule is: “Do not lie.”\
+<div style="float: right">[3+7+6+6+3=25 pts.]</div></span>
+\
+
+The data set `sugar.csv` is linked on Moodle. As needed, categorize the blood sugar level as follows:\
+&nbsp;&nbsp; `blood_sugar <=110` is considered as `Low sugar`\
+&nbsp;&nbsp; `blood_sugar > 110 but <=140` is considered as `High sugar ` and \
+&nbsp;&nbsp; `blood_sugar > 140` is considered as`See a doctor`.
+\
+\
+Create the following graphs:  \
+
+a) A boxplot of blood sugar levels.  \
+b) Dot plots for different blood sugar levels.  \
+c) Boxplots for different blood sugar levels.  \
+d) A bar plot for different blood sugar levels. \  
+e) Write a few sentences summarizing your bar plot.\
+
+Refer to the PDF file on Moodle to help replicate your graphs.  \
+
+\
+\
+
+```{r}
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+
+sugar_data <- read.csv("sugar.csv")
+head(sugar_data)
+
+sugar_data <- sugar_data %>%
+  mutate(blood_sugar_category = case_when(
+    blood_sugar <= 110 ~ "Normal sugar",
+    blood_sugar > 110 & blood_sugar < 140 ~ "High sugar",
+    blood_sugar >= 140 ~ "See a doctor"
+  ))
+head(sugar_data)
+
+##a. Boxplot of blood sugar levels
+ggplot(sugar_data, aes(x = blood_sugar)) +
+  geom_boxplot() +
+  scale_x_continuous(breaks = seq(75, 195, by = 30))+
+  labs(title = "Boxplot of Blood Sugar Levels", x = "Blood Sugar Level  (mg/ml)", y = "")+
+  ylim(c(-0.5, 0.5)) +
+  theme(axis.text.y = element_blank(),  # Remove y-axis text
+        axis.ticks.y = element_blank())  # Remove y-axis ticks
+
+## b. Dot plot of blood sugar levels
+ggplot(sugar_data, aes(x = blood_sugar, fill = blood_sugar_category)) +
+  geom_dotplot(binwidth = 2, dotsize = 1.5) +
+  scale_fill_manual(values = c("Normal sugar" = "green", "High sugar" = "pink", "See a doctor" = "red"))+
+  labs(title = "Dot Plot of Blood Sugar Levels", x = "Blood Sugar Level (mg/ml)", y = "") +
+  theme(axis.text.y = element_blank(),  # Remove y-axis text
+        axis.ticks.y = element_blank())+ # Remove y-axis ticks
+  annotate("text", x = 150, y = 0.25, label = "n = 95", size = 5, color = "black")  # Position the "n = 95" inside the chart
+  
+## c. Boxplots for different blood sugar levels
+ggplot(sugar_data, aes(x = blood_sugar_category, y = blood_sugar, fill = blood_sugar_category)) +
+  geom_boxplot() +
+  scale_y_continuous(breaks = seq(60, 200, by = 10)) +  # Set the x-axis breaks from 60 to 200 with steps of 10
+  scale_fill_manual(values = c("Normal sugar" = "green", "High sugar" = "pink", "See a doctor" = "red")) +
+  coord_flip() +
+  labs(title = "Boxplot for Different Blood Sugar Levels", x = "Blood Sugar Category", y = "Blood Sugar Level (mg/ml)")+
+  theme(axis.title.y = element_blank())
+
+## d. Bar plot for different blood sugar levels with y-axis title at the top and custom axis range
+sugar_data$blood_sugar_category <- factor(sugar_data$blood_sugar_category, 
+  levels = c("Normal sugar", "High sugar", "See a doctor"))
+
+# Calculate the percentages for each category
+percent_data <- sugar_data %>%
+  group_by(blood_sugar_category) %>%
+  summarise(count = n()) %>%
+  mutate(percent = (count / sum(count)) * 100)
+
+ggplot(percent_data, aes(x = blood_sugar_category, y = count, fill = blood_sugar_category)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = paste0(count, " (", round(percent, 0), "%)")),  # Combine count and percentage
+            vjust = 1.5, 
+            color = "black", 
+            size = 5) +
+  scale_fill_manual(values = c("Normal sugar" = "green", "High sugar" = "pink", "See a doctor" = "red")) +
+  labs(title = "Bar Plot of Blood Sugar Categories", x = "Blood Sugar Category", y = "Percent", fill = "Blood Sugar Category") +
+  ylim(c(0, 50))+
+  theme(axis.title.y = element_text(angle = 0, vjust = 1, hjust = 10))
+
+```
+
+\
+
+<span style="color:black"> 
+e) The bar plot of blood sugar categories shows that the majority of individuals, 51%, have normal blood sugar levels, represented by 48 people. The second largest group, consisting of 36 people or 38%, has high blood sugar levels. A smaller group, 11 individuals or 12%, has blood sugar levels high enough to require consulting a doctor. This distribution indicates that more than half of the individuals fall within the normal range, while a significant portion has elevated blood sugar levels, with a small percentage requiring medical attention.
+
+
+<span style="color:blue">  
+**Q2** Consider the `GDP.csv` dataset on Moodle, which contains Gross Domestic Product (GDP) for various countries. Answer the following questions: 
+<div style="float: right">[5+5+15=25 pts.]</div></span>
+\   					
+
+a) 	Create a histogram based on the data.\
+b) 	Does your histogram appear symmetric? Comment on its shape.\
+c) 	Validate the Central Limit Theorem (CLT) as discussed in class. Share your findings while incorporating the key concepts of the CLT.
+
+\
+```{r}
+gdp_data <- read.csv("GDP.csv", stringsAsFactors = FALSE)
+head(gdp_data)
+```
+
+<span style="color:black"> 
+
+# a. Create a histogram based on the data
+
+```{r}
+ggplot(gdp_data, aes(x = gdp)) +
+  geom_histogram(binwidth = 1000, fill = "blue", color = "black", alpha = 0.7) +
+  labs(title = "Histogram of GDP", x = "GDP (in billion USD)", y = "Count") +
+  theme_minimal()
+```
+
+<span style="color:black"> 
+
+# b. Comment on the histogram shape
+
+<span style="color:black"> 
+The histogram does not appear symmetric. In fact, the distribution of GDP is highly right-skewed (positively skewed). Here's a detailed explanation:
+
+Shape of the Histogram:
+
+Right-skewed: The majority of countries have relatively low GDP values, as seen in the tall bars on the left side of the histogram. These represent countries with smaller GDPs.
+
+Long tail: There is a long tail stretching toward the right, indicating that a few countries have significantly higher GDP values. These countries are outliers in the data.
+
+Skewness: The skewness is due to the presence of a few countries with very large GDPs (like the United States and China), which pull the distribution to the right, making it heavily right-skewed.
+
+Summary:
+The histogram is not symmetric. The GDP distribution is heavily skewed to the right, where most of the data is concentrated on the left (lower GDP values), with a few extreme outliers on the far right representing countries with much higher GDPs. This indicates a significant disparity in GDP distribution among countries.
+
+# c. Validate the Central Limit Theorem (CLT)
+
+```{r}
+set.seed(123)  # Ensure reproducibility
+sample_means <- replicate(1000, mean(sample(gdp_data$gdp, size = 30, replace = TRUE)))
+
+# Plot the distribution of sample means
+ggplot(data.frame(sample_means), aes(x = sample_means)) +
+  geom_histogram(binwidth = 100, fill = "green", color = "black", alpha = 0.7) +
+  labs(title = "Distribution of Sample Means", x = "Sample Means of GDP", y = "Count") +
+  theme_minimal()
+```
+
+# Findings and Validation of CLT:
+
+Shape of the Distribution: Despite the original GDP data being heavily right-skewed, the sampling distribution of the sample means should appear approximately normal, with a bell-shaped curve. This is a direct result of the Central Limit Theorem.
+
+Mean Comparison: The mean of the sample means should be very close to the true population mean. This confirms that the sampling distribution is centered around the population mean.
+
+Standard Error: As expected, the variability in the sample means (captured by the standard error) should be less than the variability in the original GDP data. As the sample size increases, the standard error decreases, and the sample means cluster more closely around the population mean.
+
+Conclusion:
+The CLT allows us to infer that, regardless of the underlying population distribution (in this case, a highly skewed GDP distribution), the distribution of the sample means will approximate a normal distribution. This normality is key for conducting hypothesis testing and constructing confidence intervals when the sample size is sufficiently large.
+
+By plotting the sampling distribution of the sample means and observing that it is approximately normal, we validate the Central Limit Theorem. The results show that even though the GDP data is skewed, the distribution of the sample means is normal, confirming the robustness of the CLT.
